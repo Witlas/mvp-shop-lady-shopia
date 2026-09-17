@@ -1,6 +1,6 @@
 "use client";
 
-import { findProduct, ProductImage, products, rupiah } from "./catalog";
+import { cartDiscount, findProduct, ProductImage, products, rupiah, type Product } from "./catalog";
 import { useState } from "react";
 import { ArrowLeft, ArrowUpRight, Check, LockKeyhole, Plus, ShoppingBag, UserRound, X } from "lucide-react";
 import Admin from "./admin";
@@ -27,7 +27,7 @@ export default function Home() {
   const [trackingFound, setTrackingFound] = useState(true);
   const subtotal = cart.reduce((sum, item) => sum + findProduct(item.id).price * item.qty, 0);
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
-  const discount = promo === "WELCOME10" ? Math.min(Math.round(subtotal * .1), 40000) : promo === "LUMIERE15" ? Math.round(cart.filter((item) => item.id === 1).reduce((sum, item) => sum + findProduct(item.id).price * item.qty, 0) * .15) : 0;
+  const discount = cartDiscount(cart, promo);
   const total = subtotal + shipping - discount;
   const notify = (message: string) => { setToast(message); window.setTimeout(() => setToast(""), 2300); };
   const showView = (next: View) => { setView(next); setCartOpen(false); window.scrollTo(0, 0); };

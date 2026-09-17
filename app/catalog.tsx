@@ -12,7 +12,11 @@ export const products: Product[] = [
 ];
 export const rupiah = (value: number) => `Rp ${new Intl.NumberFormat("id-ID").format(value)}`;
 export const findProduct = (id: number) => products.find((product) => product.id === id)!;
+export function cartDiscount(items: { id: number; qty: number }[], code: string) {
+  if (code === "WELCOME10") return Math.min(Math.round(items.reduce((sum, item) => sum + findProduct(item.id).price * item.qty, 0) * .1), 40000);
+  if (code === "LUMIERE15") return Math.round(items.filter((item) => item.id === 1).reduce((sum, item) => sum + findProduct(item.id).price * item.qty, 0) * .15);
+  return 0;
+}
 export function ProductImage({ product, sizes = "(max-width: 640px) 100vw, 25vw", className = "" }: { product: Product; sizes?: string; className?: string }) {
   return <Image src={product.img} alt={product.name} fill sizes={sizes} className={`object-cover ${className}`} />;
 }
-
